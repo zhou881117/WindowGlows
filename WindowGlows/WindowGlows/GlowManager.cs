@@ -179,12 +179,12 @@ namespace WindowGlows
             window.SetValue( EnableGlowProperty, value );
         }
 
-        static GlowInfo GetGlowInfo( Window window )
+        internal static GlowInfo GetGlowInfo( Window window )
         {
             return (GlowInfo)window.GetValue( GlowInfoProperty );
         }
 
-        static void SetGlowInfo( Window window, GlowInfo info )
+        internal static void SetGlowInfo( Window window, GlowInfo info )
         {
             window.SetValue( GlowInfoProperty, info );
         }

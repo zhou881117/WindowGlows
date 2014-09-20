@@ -4,7 +4,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media;
 
 namespace WindowGlows
 {
@@ -28,8 +27,7 @@ namespace WindowGlows
         public Func<Point, Cursor> GetCursor;
         public Func<Point, HT> GetHT;
         Border Glow;
-        static readonly SolidColorBrush accentBrush = new SolidColorBrush( Color.FromArgb( 0xff, 0x00, 0x7a, 0xcc ) ),
-                                        inactiveBrush = new SolidColorBrush( Colors.Black ) { Opacity = 0.25 };
+        Func<bool> canResize;
 
         public void NotifyResize( HT ht )
         {
@@ -75,9 +73,12 @@ namespace WindowGlows
                     }
                 case WM.NCHITTEST:
                     {
-                        Point ptScreen = NativeMethods.LPARAMTOPOINT( lParam );
-                        Point ptClient = PointFromScreen( ptScreen );
-                        Cursor = GetCursor( ptClient );
+                        if ( canResize() )
+                        {
+                            Point ptScreen = NativeMethods.LPARAMTOPOINT( lParam );
+                            Point ptClient = PointFromScreen( ptScreen );
+                            Cursor = GetCursor( ptClient );
+                        }
                         break;
                     }
                 case WM.LBUTTONDOWN:
@@ -97,6 +98,9 @@ namespace WindowGlows
 
         public void OwnerChanged()
         {
+            canResize = () => Owner.ResizeMode == ResizeMode.CanResize ? true :
+            Owner.ResizeMode == ResizeMode.CanResizeWithGrip ? true : false;
+
             switch ( Location )
             {
                 case Location.Left:
@@ -113,7 +117,6 @@ namespace WindowGlows
                             new Rect( new Point( 0, ActualHeight - tolerance ), new Size( ActualWidth, tolerance ) ).Contains( pt ) ?
                             HT.BOTTOMLEFT :
                             HT.LEFT;
-
 
                         Update = delegate
                         {
