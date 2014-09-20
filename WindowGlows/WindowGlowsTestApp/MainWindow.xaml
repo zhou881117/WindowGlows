@@ -5,7 +5,9 @@
         Title="MainWindow"
         Height="350"
         Width="525"
-        WindowGlows:GlowManager.EnableGlow="True">
+        WindowGlows:GlowManager.EnableGlow="True"
+        WindowGlows:GlowManager.ActiveGlowBrush="CornflowerBlue"
+        WindowGlows:GlowManager.InactiveGlowBrush="LightGray">
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="0"
                       CornerRadius="0"
@@ -13,24 +15,24 @@
                       ResizeBorderThickness="0" />
     </WindowChrome.WindowChrome>
     <Border BorderThickness="1"
-            BorderBrush="#FF007ACC">
+            BorderBrush="{Binding Path=(WindowGlows:GlowManager.ActiveGlowBrush),RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="36" />
                 <RowDefinition />
                 <RowDefinition Height="24" />
             </Grid.RowDefinitions>
-            <Rectangle Fill="#FF007ACC"
+            <Rectangle Fill="{Binding Path=(WindowGlows:GlowManager.ActiveGlowBrush),RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"
                        Margin="-1,11,-1,0"
                        StrokeThickness="0"
                        ClipToBounds="True" />
             <TextBlock HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Text="{Binding Title, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
-                       Foreground="LightGray"
+                       Foreground="{Binding Path=(WindowGlows:GlowManager.InactiveGlowBrush),RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"
                        Margin="0,11,0,0" />
             <Rectangle Grid.Row="2"
-                       Fill="#FF007ACC"
+                       Fill="{Binding Path=(WindowGlows:GlowManager.ActiveGlowBrush),RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}"
                        Margin="-1,0,-1,-1"
                        StrokeThickness="0"
                        ClipToBounds="True" />

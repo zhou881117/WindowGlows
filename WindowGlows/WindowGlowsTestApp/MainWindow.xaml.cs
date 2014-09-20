@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using WindowGlows;
 
 namespace WindowGlowsTestApp
 {
