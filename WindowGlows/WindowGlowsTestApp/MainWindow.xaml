@@ -1,0 +1,39 @@
+﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:WindowGlows="http://GlowWindow.codeplex.com/"
+        x:Class="WindowGlowsTestApp.MainWindow"
+        Title="MainWindow"
+        Height="350"
+        Width="525"
+        WindowGlows:GlowManager.EnableGlow="True">
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="0"
+                      CornerRadius="0"
+                      CaptionHeight="36"
+                      ResizeBorderThickness="0" />
+    </WindowChrome.WindowChrome>
+    <Border BorderThickness="1"
+            BorderBrush="#FF007ACC">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="36" />
+                <RowDefinition />
+                <RowDefinition Height="24" />
+            </Grid.RowDefinitions>
+            <Rectangle Fill="#FF007ACC"
+                       Margin="-1,11,-1,0"
+                       StrokeThickness="0"
+                       ClipToBounds="True" />
+            <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Text="{Binding Title, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}"
+                       Foreground="LightGray"
+                       Margin="0,11,0,0" />
+            <Rectangle Grid.Row="2"
+                       Fill="#FF007ACC"
+                       Margin="-1,0,-1,-1"
+                       StrokeThickness="0"
+                       ClipToBounds="True" />
+        </Grid>
+    </Border>
+</Window>
