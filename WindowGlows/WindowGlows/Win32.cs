@@ -37,29 +37,29 @@ namespace WindowGlows
 
     class NativeMethods
     {
-        public static Func<short, short, IntPtr> MAKELPARAM = ( wLow, wHigh ) =>
+        public static Func<short, short, IntPtr> MAKELPARAM = (wLow, wHigh) =>
         {
-            return new IntPtr( ( wHigh << 16 ) | ( wLow & 0xFFFF ) );
+            return new IntPtr((wHigh << 16) | (wLow & 0xFFFF));
         };
 
         public static Func<IntPtr, Point> LPARAMTOPOINT = lParam =>
         {
-            return new Point( (int)lParam & 0xFFFF, ( (int)lParam >> 16 ) & 0xFFFF );
+            return new Point((int)lParam & 0xFFFF, ((int)lParam >> 16) & 0xFFFF);
         };
 
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool SendNotifyMessage( IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam );
+        public static extern bool SendNotifyMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GetCursorPos( out POINT lpPoint );
+        public static extern bool GetCursorPos(out POINT lpPoint);
 
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern int GetWindowLong( IntPtr hWnd, int nIndex );
+        public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 
         [DllImport("user32.dll", SetLastError = true)]
-        public static extern int SetWindowLong( IntPtr hWnd, int nIndex, int dwNewLong );
+        public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
     }
 
     [StructLayout(LayoutKind.Sequential)]
