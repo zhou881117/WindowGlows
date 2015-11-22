@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -92,6 +93,13 @@ namespace WindowGlows
                         NativeMethods.SendNotifyMessage(ownerHwnd, (int)WM.NCLBUTTONDOWN, (IntPtr)result, IntPtr.Zero);
                         break;
                     }
+                case WM.GETMINMAXINFO:
+                    {
+                        MINMAXINFO info = (MINMAXINFO)Marshal.PtrToStructure(lParam, typeof(MINMAXINFO));
+                        info.ptMaxSize = info.ptMaxTrakSize = new POINT { x = int.MaxValue, y = int.MaxValue };
+                        Marshal.StructureToPtr(info, lParam, true);
+                    }
+                    break;
             }
             return IntPtr.Zero;
         }

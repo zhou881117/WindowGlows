@@ -21,6 +21,7 @@ namespace WindowGlows
     {
         NCLBUTTONDOWN = 0x00A1,
         MOUSEACTIVATE = 0x0021,
+        GETMINMAXINFO = 0x0024,
         LBUTTONDOWN = 0x0201,
         NCHITTEST = 0x0084
     }
@@ -67,5 +68,15 @@ namespace WindowGlows
     {
         public int x;
         public int y;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    struct MINMAXINFO
+    {
+        public POINT ptReserved;
+        public POINT ptMaxSize;
+        public POINT ptMaxPosition;
+        public POINT ptMinTrackSize;
+        public POINT ptMaxTrakSize;
     }
 }
