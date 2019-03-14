@@ -3,3 +3,7 @@
 ################################################################################
 
 /WindowGlows/WindowGlows/bin/Debug
+/WindowGlows/WindowGlows/obj/Debug
+/WindowGlows/WindowGlowsTestApp/bin/Debug
+/WindowGlows/WindowGlowsTestApp/obj/Debug
+/WindowGlows/.vs/WindowGlows/v14/.suo

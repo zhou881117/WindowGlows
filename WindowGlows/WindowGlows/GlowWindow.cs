@@ -107,8 +107,7 @@ namespace WindowGlows
         public void OwnerChanged()
         {
             canResize = () => Owner.ResizeMode == ResizeMode.CanResize ? true :
-            Owner.ResizeMode == ResizeMode.CanResizeWithGrip ? true : false;
-
+            Owner.ResizeMode == ResizeMode.CanResizeWithGrip ? true : false; 
             switch (Location)
             {
                 case Location.Left:
@@ -130,10 +129,21 @@ namespace WindowGlows
                         {
                             if (Glow != null)
                                 Glow.Margin = new Thickness(glowThickness, glowThickness, -glowThickness, glowThickness);
-                            Left = Owner.Left - glowThickness;
-                            Top = Owner.Top - glowThickness;
+                            double left = 0;
+                            double top = 0;
+                            if (Owner.WindowState == System.Windows.WindowState.Normal)
+                            {
+                                left = Owner.Left;
+                                top = Owner.Top;
+                            }
+                            Left = left - glowThickness;
+                            Top = top - glowThickness;
                             Width = glowThickness;
                             Height = Owner.ActualHeight + glowThickness * 2;
+                            if (Owner.WindowState != WindowState.Normal)
+                            {
+                                Hide();
+                            }
                         };
                         break;
                     }
@@ -158,10 +168,21 @@ namespace WindowGlows
                         {
                             if (Glow != null)
                                 Glow.Margin = new Thickness(glowThickness, glowThickness, glowThickness, -glowThickness);
-                            Left = Owner.Left - glowThickness;
-                            Top = Owner.Top - glowThickness;
+                            double left = 0;
+                            double top = 0;
+                            if (Owner.WindowState == System.Windows.WindowState.Normal)
+                            {
+                                left = Owner.Left;
+                                top = Owner.Top;
+                            }
+                            Left = left - glowThickness;
+                            Top = top - glowThickness;
                             Width = Owner.ActualWidth + glowThickness * 2;
                             Height = glowThickness;
+                            if (Owner.WindowState != WindowState.Normal)
+                            {
+                                Hide();
+                            }
                         };
                         break;
                     }
@@ -186,10 +207,21 @@ namespace WindowGlows
                         {
                             if (Glow != null)
                                 Glow.Margin = new Thickness(-glowThickness, glowThickness, glowThickness, glowThickness);
-                            Left = Owner.Left + Owner.ActualWidth;
-                            Top = Owner.Top - glowThickness;
+                            double left = 0;
+                            double top = 0;
+                            if (Owner.WindowState == System.Windows.WindowState.Normal)
+                            {
+                                left = Owner.Left;
+                                top = Owner.Top;
+                            }
+                            Left = left + Owner.ActualWidth;
+                            Top = top - glowThickness;
                             Width = glowThickness;
                             Height = Owner.ActualHeight + glowThickness * 2;
+                            if (Owner.WindowState != WindowState.Normal)
+                            {
+                                Hide();
+                            }
                         };
                         break;
                     }
@@ -214,14 +246,26 @@ namespace WindowGlows
                         {
                             if (Glow != null)
                                 Glow.Margin = new Thickness(glowThickness, -glowThickness, glowThickness, glowThickness);
-                            Left = Owner.Left - glowThickness;
-                            Top = Owner.Top + Owner.ActualHeight;
+                            double left = 0;
+                            double top = 0;
+                            if (Owner.WindowState == System.Windows.WindowState.Normal)
+                            {
+                                left = Owner.Left;
+                                top = Owner.Top;
+                            }
+                            Left = left - glowThickness;
+                            Top = top + Owner.ActualHeight;
                             Width = Owner.ActualWidth + glowThickness * 2;
                             Height = glowThickness;
+                            if (Owner.WindowState != WindowState.Normal)
+                            {
+                                Hide();
+                            }
                         };
                         break;
                     }
             }
+            
             Owner.LocationChanged += delegate
             {
                 Update();
@@ -230,11 +274,15 @@ namespace WindowGlows
             {
                 Update();
             };
+          
             Owner.StateChanged += delegate
             {
                 switch (Owner.WindowState)
                 {
                     case WindowState.Maximized:
+                        Hide();
+                        break;
+                    case WindowState.Minimized:
                         Hide();
                         break;
                     default:
@@ -243,12 +291,29 @@ namespace WindowGlows
                         break;
                 }
             };
+           
+            Owner.IsVisibleChanged += delegate
+            {
+                if (Owner.IsVisible)
+                {
+                    Update();
+                }
+                else
+                {
+                    Hide();
+                }
+            };
+           
             Owner.Activated += delegate
             {
                 Binding activeBrushBinding = new Binding();
                 activeBrushBinding.Path = new PropertyPath(GlowManager.ActiveGlowBrushProperty);
                 activeBrushBinding.Source = Owner;
                 SetBinding(ForegroundProperty, activeBrushBinding);
+                if (Owner.WindowState != WindowState.Normal)
+                {
+                    Hide();
+                }
             };
             Owner.Deactivated += delegate
             {
@@ -256,9 +321,16 @@ namespace WindowGlows
                 activeBrushBinding.Path = new PropertyPath(GlowManager.InactiveGlowBrushProperty);
                 activeBrushBinding.Source = Owner;
                 SetBinding(ForegroundProperty, activeBrushBinding);
+                if (Owner.WindowState != WindowState.Normal)
+                {
+                    Hide();
+                }
             };
+            
             Update();
-            Show();
+            
         }
+
+
     }
 }

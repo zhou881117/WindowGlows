@@ -68,9 +68,34 @@ namespace WindowGlows
             {
                 glow.Owner = window;
                 glow.OwnerChanged();
+
             }
             SetGlowInfo(window, glowInfo);
+
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += Worker_DoWork;
+            worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
+            worker.RunWorkerAsync(new Tuple<Window, GlowInfo>(window, glowInfo));
         };
+
+        private static void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Tuple<Window, GlowInfo> tuple = e.Result as Tuple<Window, GlowInfo>;
+            if (tuple.Item1.IsVisible)
+            {
+                foreach (GlowWindow glow in tuple.Item2.glows)
+                {
+                    glow.Show();
+                }
+                tuple.Item1.Activate();
+            }
+        }
+
+        private static void Worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            System.Threading.Thread.Sleep(20);
+            e.Result = e.Argument;
+        }
 
         static bool Assign(Window window)
         {
@@ -79,16 +104,22 @@ namespace WindowGlows
             if (GetGlowInfo(window) != null)
                 return false;
             else if (!window.IsLoaded)
+            {
                 window.SourceInitialized += delegate
                 {
                     assignGlows(window);
                 };
+            }
             else
             {
                 assignGlows(window);
             }
             return true;
         }
+
+
+
+
 
         static bool Unassign(Window window)
         {
